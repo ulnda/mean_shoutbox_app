@@ -6,6 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var user         = require('./lib/middleware/user');
 var validate     = require('./lib/middleware/validate');
+var page         = require('./lib/middleware/page');
+
+var Entry        = require('./models/entry');
 
 var routes   = require('./routes/index');
 var users    = require('./routes/users');
@@ -40,7 +43,7 @@ app.get('/login',     login.form);
 app.post('/login',    login.submit);
 app.get('/logout',    login.logout);
 
-app.get('/',          entries.list)
+app.get('/', page(Entry.count, 5), entries.list);
 app.get('/post',      entries.form);
 app.post('/post',     
           validate.required('entry[title]'),
