@@ -51,8 +51,20 @@ User.prototype.hashPassword = function(fn) {
 	});
 };
 
-var tobi = new User({ name: 'Tobi', pass: 'im a ferret', age: 2 });
-tobi.save(function(err) {
-	if (err) throw err;
-	console.log('user id %d', tobi.id);
-});
+User.getByName = function(name, fn) {
+	User.getId(name, function(err, id) {
+		if (err) return fn(err);
+		User.get(id, fn);
+	});
+};
+
+User.getId = function(name, fn) {
+	db.get('user:id:' + name, fn);
+}; 
+
+User.get = function(id, fn) {
+	db.hgetall('user:' + id, function(err, user) {
+		if (err) return fn(err);
+		fn(null, new User(user));
+	});
+};
