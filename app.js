@@ -43,7 +43,7 @@ app.get('/login',     login.form);
 app.post('/login',    login.submit);
 app.get('/logout',    login.logout);
 
-app.get('/', page(Entry.count, 5), entries.list);
+app.get('/:page?', page(Entry.count, 5), entries.list);
 app.get('/post',      entries.form);
 app.post('/post',     
           validate.required('entry[title]'),
